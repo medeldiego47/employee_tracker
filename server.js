@@ -138,3 +138,64 @@ function addRole(){
         })
     })
 }
+
+function addEmployee(){
+    inquirer.prompt([
+        {
+            type: "input",
+            message: "What is the first name of the new employee?",
+            name:"firstName",
+        },
+        {
+            type:"input",
+            message: "What is the last name of the new employee?",
+            name:"lastName"
+        },
+        {
+            type:"input",
+            message:"what is the employees role id?",
+            name:"roleID"
+        },
+    ]).then((result)=>{
+        let query= "INSERT INTO employee (first_name,last_name,role_id) VALUES (?,?,?)"
+        db.query(query,[result.firstName,result.lastName,result.roleID],(err,res)=>{
+            (err)?console.log(err):console.table(res);
+            
+        });
+        let query2 = "SELECT * FROM employee";
+        console.log("employee succesfully added to table below!")
+        db.query(query2, function(err,res){
+            err? console.log(err):console.table(res);
+            init();
+        })
+    })
+};
+
+function updateEmployee(){
+     let query = "SELECT * FROM employee";
+    db.query(query, function(err,res){
+    err? console.log(err):console.table(res);})
+    let query2 = "SELECT * FROM role";
+    db.query(query2, function(err,res){
+        err? console.log(err):console.table(res);})
+
+
+    inquirer.prompt([{
+        type:"input",
+        message:"which employee from the above table would you like to update, please use employee id",
+        name: "id"
+    },{
+        type:"input",
+        message:"what will their new role_id be please select from the table above",
+        name:"newRole"
+    }]).then((result)=>{
+        let query3 = "UPDATE employee SET role_id =? WHERE id= ?"
+        db.query(query3,[result.newRole,result.id],(err,res)=>{
+            err?console.log(err):console.table(res);
+            let query = "SELECT * FROM employee";
+            db.query(query, function(err,res){
+            err? console.log(err):console.table(res);
+        init();})
+        })
+    })
+};
