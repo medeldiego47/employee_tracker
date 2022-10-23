@@ -70,3 +70,38 @@ function viewDepartments(){
     })
 };
 
+function viewAllRoles(){
+    let query = "SELECT * FROM role";
+    db.query(query, function(err,res){
+        err? console.log(err):console.table(res);
+        init();
+    })
+};
+
+function viewAllEmployees(){
+    let query = "SELECT * FROM employee";
+    db.query(query, function(err,res){
+        err? console.log(err):console.table(res);
+        init();
+    })
+};
+
+function addDepartment(){
+    inquirer.prompt({
+        type:"input",
+        message: "what is the name of the new department?",
+        name:"department"
+    }).then((result)=>{ 
+        let query = "INSERT INTO department (name) VALUES (?)"
+        db.query(query,[result.department],(err,res)=>{
+        (err)?console.log(err):console.table(res);
+        let query2 = "SELECT * FROM department";
+        db.query(query2, function(err,res){
+            err? console.log(err):console.table(res);
+            init();
+        })
+        
+    })
+
+    })
+}
