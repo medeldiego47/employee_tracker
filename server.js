@@ -95,6 +95,7 @@ function addDepartment(){
         let query = "INSERT INTO department (name) VALUES (?)"
         db.query(query,[result.department],(err,res)=>{
         (err)?console.log(err):console.table(res);
+        console.log("Department added to table below")
         let query2 = "SELECT * FROM department";
         db.query(query2, function(err,res){
             err? console.log(err):console.table(res);
@@ -103,5 +104,37 @@ function addDepartment(){
         
     })
 
+    })
+};
+
+function addRole(){
+    inquirer.prompt([
+        {
+            type: "input",
+            message: "What is the name of the new role?",
+            name:"role",
+        },
+        {
+            type:"input",
+            message: "Please enter the salary of this role and include the decimal",
+            name:"salary"
+        },
+        {
+            type:"input",
+            message:"what is the department id number?",
+            name:"departmentID"
+        }
+    ]).then((result)=>{
+        let query= "INSERT INTO role (title,salary,department_id) VALUES (?,?,?)"
+        db.query(query,[result.role,result.salary,result.departmentID],(err,res)=>{
+            (err)?console.log(err):console.table(res);
+            
+        });
+        let query2 = "SELECT * FROM role";
+        console.log("role succesfully added to table below!")
+        db.query(query2, function(err,res){
+            err? console.log(err):console.table(res);
+            init();
+        })
     })
 }
