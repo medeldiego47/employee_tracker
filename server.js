@@ -4,15 +4,14 @@ const mysql = require('mysql2');
 const consoleTable= require('console.table');
 const { exit } = require('process');
 
-
-const connection = mysql.createConnection( {
+const db = mysql.createConnection( {
     host:"localhost",
     user:"root",
     password: process.env.PASSWORD,
     database:"employee_db"
 });
-connection.connect (function(err){
-    (err)? console.log(err):console.log(`connected as ${connection.threadId}`);
+db.connect (function(err){
+    (err)? console.log(err):console.log(`connected as ${db.threadId}`);
     
     init()
 });
@@ -62,3 +61,12 @@ function init(){
                 exit();
         } })
 };
+
+function viewDepartments(){
+    let query = "SELECT * FROM department";
+    db.query(query, function(err,res){
+        err? console.log(err):console.table(res);
+        init();
+    })
+};
+
